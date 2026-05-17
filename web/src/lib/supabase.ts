@@ -6,9 +6,16 @@ import { createClient } from '@supabase/supabase-js'
  */
 function normalizeUrl(raw: unknown): string {
   if (raw == null) return ''
-  // Eliminar comillas, corchetes y espacios del inicio/fin (pegado desde JSON/arrays)
-  let s = String(raw).trim().replace(/^[\s"'`[\]]+|[\s"'`[\]]+$/g, '').trim()
+  let s = String(raw).trim()
   if (!s || s === 'undefined' || s === 'null' || s === 'configure-env.invalid') return ''
+
+  // Deshacer formato de link Markdown: [texto](https://...) → https://...
+  const mdLink = s.match(/\[.*?\]\((https?:\/\/[^)\s]+)\)/)
+  if (mdLink) return mdLink[1].replace(/\/+$/, '')
+
+  // Eliminar comillas, corchetes y espacios del inicio/fin (pegado desde JSON/arrays)
+  s = s.replace(/^[\s"'`[\]]+|[\s"'`[\]]+$/g, '').trim()
+  if (!s || s === 'undefined' || s === 'null') return ''
 
   // Si parece solo el ref del proyecto (solo letras/números, sin puntos ni slash)
   if (/^[a-z0-9]{10,30}$/.test(s)) {
