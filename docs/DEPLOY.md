@@ -2,14 +2,27 @@
 
 La app es **solo frontend**: Vite empaqueta estáticos que hablan con **Supabase** (HTTPS). En el build hace falta `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` (en local: `web/.env.local`; en el proveedor de hosting: variables de entorno).
 
-## GitHub Pages
+## GitHub Pages (recomendado con Actions)
 
-GitHub Pages sirve archivos estáticos. Después de `npm run build` en `web/`, publicá el contenido de `web/dist`.
+El repo incluye [.github/workflows/deploy-pages.yml](../.github/workflows/deploy-pages.yml): construye `web/` con `base` `/Bomberos-de-R-o-Bueno/` y sube `dist` a Pages.
 
-- Si el sitio queda en una **subruta** (`https://usuario.github.io/nombre-repo/`), configurá en Vite `base: '/nombre-repo/'` y **React Router** con `basename` acorde (no viene preconfigurado en esta rama).
-- Para rutas SPA suele hacer falta que **`404.html`** sea una copia de **`index.html`** (GitHub devuelve 404 para rutas profundas).
+### Por qué antes veías solo el README
 
-No hay workflow de deploy incluido en este repo; podés usar Actions propias o subir `dist` a una rama `gh-pages`.
+Si en **Settings → Pages** tenés **Source: Deploy from a branch**, GitHub publica el repo (Markdown/README), **no** la app React. Tenés que usar **GitHub Actions**.
+
+### Pasos
+
+1. Repo → **Settings** → **Pages** → **Source:** **GitHub Actions** (no una rama).
+2. **Secrets** (`Settings` → `Secrets and variables` → `Actions`): `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`.
+3. Push a `main` o **Re-run** del workflow **Deploy GitHub Pages**.
+4. Primera vez: puede pedir aprobar el entorno **github-pages**.
+5. Supabase Auth → **Site URL** y **Redirect URLs**: `https://rugdraiger.github.io/Bomberos-de-R-o-Bueno/` y `.../**`.
+
+Si **renombrás el repo**, cambiá `VITE_SITE_BASE` en el workflow para que coincida con `/nombre-repo/`.
+
+### Manual (sin Actions)
+
+`npm run build` en `web` con `VITE_SITE_BASE=/tu-repo/` y subir `dist`; copiar `index.html` → `404.html`; añadir `.nojekyll` en la raíz del sitio publicado.
 
 ## Vercel (recomendado, rápido)
 

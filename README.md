@@ -83,7 +83,10 @@ UPDATE profiles SET rol = 'admin' WHERE email = 'tu@correo.com';
 
 ## Producción
 
-Guía de despliegue (Vercel, Cloudflare, Netlify, notas GitHub Pages): [docs/DEPLOY.md](docs/DEPLOY.md).
+- **GitHub Pages:** la app no es el README: hay que publicar el **build de Vite** (`web/dist`) con **GitHub Actions** (ver [docs/DEPLOY.md](docs/DEPLOY.md)); si Pages está en “Deploy from branch” solo verás documentación.
+- Otras plataformas: mismo doc.
+
+Guía detallada: [docs/DEPLOY.md](docs/DEPLOY.md).
 
 ## Checklist del plan
 

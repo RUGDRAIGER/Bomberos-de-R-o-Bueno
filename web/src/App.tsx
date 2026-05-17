@@ -7,10 +7,12 @@ import { LoginPage } from './pages/LoginPage'
 import { ParteDetailPage } from './pages/ParteDetailPage'
 import { ParteWizardPage } from './pages/ParteWizardPage'
 
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={routerBasename || undefined}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route

@@ -1,6 +1,15 @@
 import { VitePWA } from 'vite-plugin-pwa'
 
-export function pwaPlugin() {
+function asset(base: string, file: string): string {
+  if (base === '/') return `/${file}`
+  return `${base.replace(/\/$/, '')}/${file}`
+}
+
+function navigateFallback(base: string): string {
+  return asset(base, 'index.html')
+}
+
+export function pwaPlugin(base: string) {
   return VitePWA({
     registerType: 'autoUpdate',
     includeAssets: ['favicon.svg', 'pwa-192.png', 'pwa-512.png'],
@@ -12,18 +21,18 @@ export function pwaPlugin() {
       background_color: '#f5f5f5',
       display: 'standalone',
       orientation: 'portrait',
-      scope: '/',
-      start_url: '/',
+      scope: base,
+      start_url: base,
       lang: 'es',
       icons: [
         {
-          src: '/pwa-192.png',
+          src: asset(base, 'pwa-192.png'),
           sizes: '192x192',
           type: 'image/png',
           purpose: 'any',
         },
         {
-          src: '/pwa-512.png',
+          src: asset(base, 'pwa-512.png'),
           sizes: '512x512',
           type: 'image/png',
           purpose: 'any maskable',
@@ -32,7 +41,7 @@ export function pwaPlugin() {
     },
     workbox: {
       globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-      navigateFallback: '/index.html',
+      navigateFallback: navigateFallback(base),
     },
     devOptions: {
       enabled: true,
