@@ -51,6 +51,9 @@ jobs:
       - run: touch dist/.nojekyll
         working-directory: web
 
+      - name: Configurar Pages (metadata para deploy)
+        uses: actions/configure-pages@v4
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/dist

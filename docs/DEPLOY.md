@@ -43,6 +43,18 @@ Si cambiás usuario u organización en GitHub, ajustá la **Site URL** y redirec
 
 `npm run build` en `web` con `VITE_SITE_BASE=/tu-repo/` y subir `dist`; copiar `index.html` → `404.html`; añadir `.nojekyll` en la raíz del sitio publicado.
 
+### “No despliega” / sigo viendo lo mismo
+
+1. **URL correcta:** tiene que ser exactamente la del **repositorio**, con la ruta del proyecto:  
+   `https://<usuario>.github.io/<nombre-repo>/`  
+   Ejemplo: `https://rugdraiger.github.io/Bomberos-de-R-o-Bueno/` — **no** solo `https://<usuario>.github.io/`.
+
+2. **Comprobar Actions:** en **Actions → Deploy GitHub Pages**, el último run debe estar en **verde** (jobs `build` y `deploy`). Si cambiaste secrets, hacé **Run workflow** de nuevo: el sitio **no** usa valores nuevos hasta ese build.
+
+3. **Caché del navegador / PWA:** la app registra service worker. Abrí DevTools (F12) → pestaña **Application** (o **Aplicación**) → **Storage → Clear site data** / borrar **Service Workers**, luego **Ctrl+Shift+R**.
+
+4. **Settings → Pages:** **Source** debe ser **GitHub Actions**. Si sigue **Deploy from a branch**, GitHub puede mostrar el README en lugar del `dist` del workflow.
+
 ## Vercel (recomendado, rápido)
 
 1. Conectar el repo de GitHub a [Vercel](https://vercel.com/).
