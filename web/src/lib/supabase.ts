@@ -6,7 +6,8 @@ import { createClient } from '@supabase/supabase-js'
  */
 function normalizeUrl(raw: unknown): string {
   if (raw == null) return ''
-  let s = String(raw).trim().replace(/^["'`]+|["'`]+$/g, '').trim()
+  // Eliminar comillas, corchetes y espacios del inicio/fin (pegado desde JSON/arrays)
+  let s = String(raw).trim().replace(/^[\s"'`[\]]+|[\s"'`[\]]+$/g, '').trim()
   if (!s || s === 'undefined' || s === 'null' || s === 'configure-env.invalid') return ''
 
   // Si parece solo el ref del proyecto (solo letras/números, sin puntos ni slash)
