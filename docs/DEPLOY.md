@@ -16,9 +16,24 @@ Si en **Settings → Pages** tenés **Source: Deploy from a branch**, GitHub pub
 2. **Secrets** (`Settings` → `Secrets and variables` → `Actions`): `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`.
 3. Push a `main` o **Re-run** del workflow **Deploy GitHub Pages**.
 4. Primera vez: puede pedir aprobar el entorno **github-pages**.
-5. Supabase Auth → **Site URL** y **Redirect URLs**: `https://rugdraiger.github.io/Bomberos-de-R-o-Bueno/` y `.../**`.
+5. Supabase Auth: tabla **[Supabase y URLs de Auth](#supabase-y-urls-de-auth)** más abajo.
 
 Si **renombrás el repo**, cambiá `VITE_SITE_BASE` en el workflow para que coincida con `/nombre-repo/`.
+
+### Supabase y URLs de Auth
+
+En el [Dashboard de Supabase](https://supabase.com/dashboard) → tu proyecto → **Authentication** → **URL Configuration**:
+
+| Campo | Valor recomendado |
+|--------|-------------------|
+| **Site URL** | `https://rugdraiger.github.io/Bomberos-de-R-o-Bueno/` |
+| **Redirect URLs** | `https://rugdraiger.github.io/Bomberos-de-R-o-Bueno/**` y `http://localhost:5173/**` |
+
+Los **secrets** del repo en GitHub (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) deben ser la **misma** URL y anon key que ves en **Project Settings → API** de ese proyecto.
+
+La integración **Supabase ↔ GitHub** (migraciones automáticas, etc.) es aparte: no sustituye estos URLs ni los secrets del workflow de Pages.
+
+Si cambiás usuario u organización en GitHub, ajustá la **Site URL** y redirects al nuevo dominio `*.github.io`.
 
 ### Manual (sin Actions)
 

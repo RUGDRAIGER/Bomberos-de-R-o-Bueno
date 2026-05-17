@@ -5,6 +5,7 @@ name: Deploy GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -26,6 +27,15 @@ jobs:
       run:
         working-directory: web
     steps:
+      - name: Comprobar secrets de Supabase (build)
+        run: |
+          if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
+            echo "::error::Faltan secrets del repo: VITE_SUPABASE_URL y/o VITE_SUPABASE_ANON_KEY (Settings → Secrets → Actions)."
+            exit 1
+          fi
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:

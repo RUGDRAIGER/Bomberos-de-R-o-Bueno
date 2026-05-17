@@ -83,7 +83,7 @@ UPDATE profiles SET rol = 'admin' WHERE email = 'tu@correo.com';
 
 ## Producción
 
-- **GitHub Pages:** la app no es el README: hay que publicar el **build de Vite** (`web/dist`) con **GitHub Actions** (ver [docs/DEPLOY.md](docs/DEPLOY.md)); si Pages está en “Deploy from branch” solo verás documentación.
+Tras el primer deploy, configurá **Authentication → URL Configuration** en Supabase según la tabla **Supabase y URLs de Auth** en [docs/DEPLOY.md](docs/DEPLOY.md).
 - Otras plataformas: mismo doc.
 
 Guía detallada: [docs/DEPLOY.md](docs/DEPLOY.md).
