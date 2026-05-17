@@ -7,6 +7,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# GitHub depreca Node 20 en el runtime de Actions (blog 2025-09); usar Node 24 en las actions.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: read
   pages: write
@@ -35,7 +39,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: npm
           cache-dependency-path: web/package-lock.json
 
