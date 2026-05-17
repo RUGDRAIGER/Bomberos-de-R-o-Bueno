@@ -31,6 +31,10 @@ En el [Dashboard de Supabase](https://supabase.com/dashboard) → tu proyecto �
 
 Los **secrets** del repo en GitHub (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) deben ser la **misma** URL y anon key que ves en **Project Settings → API** de ese proyecto.
 
+- Pegá el valor **sin comillas** (`"` `'`) ni espacios antes/después.
+- La URL debe ser tipo `https://xxxxxxxx.supabase.co` (https obligatorio en producción).
+- Si ves pantalla en blanco y en consola `Invalid supabaseUrl`, el build entró sin URL válida: corregí los secrets y volvé a ejecutar **Deploy GitHub Pages**.
+
 La integración **Supabase ↔ GitHub** (migraciones automáticas, etc.) es aparte: no sustituye estos URLs ni los secrets del workflow de Pages.
 
 Si cambiás usuario u organización en GitHub, ajustá la **Site URL** y redirects al nuevo dominio `*.github.io`.

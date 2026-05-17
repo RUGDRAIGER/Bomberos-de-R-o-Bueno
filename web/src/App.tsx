@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { MisconfiguredEnv } from './components/MisconfiguredEnv'
 import { AuthProvider } from './context/AuthContext'
 import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
@@ -6,10 +7,15 @@ import { DashboardPage } from './pages/DashboardPage'
 import { LoginPage } from './pages/LoginPage'
 import { ParteDetailPage } from './pages/ParteDetailPage'
 import { ParteWizardPage } from './pages/ParteWizardPage'
+import { supabaseReady } from './lib/supabase'
 
 const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '')
 
 export default function App() {
+  if (!supabaseReady) {
+    return <MisconfiguredEnv />
+  }
+
   return (
     <AuthProvider>
       <BrowserRouter basename={routerBasename || undefined}>
