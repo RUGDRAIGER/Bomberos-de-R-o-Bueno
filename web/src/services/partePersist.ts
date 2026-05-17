@@ -74,7 +74,7 @@ export async function submitWizardParte(
     if (!pid || !userId) return
     await updateParte(pid, { ...data, paso_actual: WIZARD_TOTAL_PASOS }, userId)
     await enviarParte(pid, userId)
-    navigate('/')
+    navigate(`/ver/${pid}`, { replace: true })
   } catch (e) {
     fb.setError(e instanceof Error ? e.message : 'Error al enviar')
   } finally {

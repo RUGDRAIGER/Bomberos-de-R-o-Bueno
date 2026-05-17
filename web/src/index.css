@@ -280,7 +280,62 @@ textarea {
 
 .login-page .card {
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
+}
+
+.login-divider {
+  border: none;
+  border-top: 1px solid var(--gris-200);
+  margin: 1.25rem 0 1rem;
+}
+
+.login-mobile-title {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+  color: var(--rojo-oscuro);
+}
+
+.login-mobile-lead {
+  margin: 0 0 0.75rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.login-mobile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.login-mobile-actions .btn {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+}
+
+.login-mobile-steps {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #444;
+}
+
+.login-mobile-steps li {
+  margin-bottom: 0.35rem;
+}
+
+.login-ios-note {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.login-ios-note code {
+  font-size: 0.78em;
+}
+
+.login-apk-link {
+  border: 1px solid var(--gris-200);
 }
 
 .login-page h1 {
@@ -294,4 +349,183 @@ textarea {
   margin: 0 0 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid var(--gris-200);
+}
+
+.hint-compact {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.parte-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.parte-numero-oficial {
+  margin: 0.35rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--rojo-oscuro);
+}
+
+.parte-pdf-panel {
+  padding: 1rem;
+  margin-top: 1rem;
+  background: var(--gris-100);
+  border-radius: 8px;
+  border: 1px solid var(--gris-200);
+}
+
+.parte-detail-actions {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.parte-list-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  border-bottom: 1px solid var(--gris-200);
+}
+
+.parte-list-row-main {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.parte-list-row-pdf {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.65rem 1rem;
+  border-left: 1px solid var(--gris-200);
+}
+
+@media (max-width: 520px) {
+  .parte-list-row-pdf {
+    flex: 1 1 100%;
+    border-left: none;
+    border-top: 1px solid var(--gris-200);
+    justify-content: stretch;
+  }
+
+  .parte-list-row-pdf .btn-pdf-compact,
+  .btn-pdf-full {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.pof-pdf-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.pof-pdf-stack--compact {
+  min-width: 140px;
+}
+
+.btn-pdf-full {
+  width: 100%;
+  max-width: 320px;
+}
+
+.btn-pdf-compact {
+  white-space: nowrap;
+}
+
+/* Panel admin — usuarios */
+.admin-panel .hint code {
+  font-size: 0.85em;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.admin-users-table th,
+.admin-users-table td {
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--gris-200);
+  vertical-align: middle;
+}
+
+.admin-users-table th {
+  font-weight: 600;
+  color: #444;
+}
+
+.admin-row-blocked {
+  background: #fff5f5;
+}
+
+.admin-actions-cell {
+  white-space: nowrap;
+}
+
+.btn-admin-compact {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.85rem;
+  margin: 0 0.35rem 0.25rem 0;
+}
+
+.admin-btn-danger {
+  color: var(--rojo-oscuro);
+}
+
+@media (max-width: 640px) {
+  .admin-users-table thead {
+    display: none;
+  }
+
+  .admin-users-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--gris-200);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .admin-users-table td {
+    display: block;
+    border-bottom: 1px solid var(--gris-100);
+    padding: 0.5rem 0.75rem;
+  }
+
+  .admin-users-table td:last-child {
+    border-bottom: none;
+  }
+
+  .admin-users-table td::before {
+    content: attr(data-label) ': ';
+    font-weight: 600;
+    color: #555;
+    display: inline-block;
+    min-width: 5.5rem;
+  }
+
+  .admin-actions-cell {
+    white-space: normal;
+  }
+
+  .btn-admin-compact {
+    width: calc(50% - 0.25rem);
+    margin: 0.25rem 0.25rem 0 0;
+  }
 }

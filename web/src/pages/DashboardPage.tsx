@@ -1,17 +1,25 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { PofPdfButton } from '../components/PofPdfButton'
+import { useAuth } from '../context/AuthContext'
 import { listPartes } from '../services/partes'
+import type { Parte } from '../types/database'
+import { canDownloadPofPdf } from '../utils/pdfAccess'
 
-interface ParteRow {
-  id: string
-  estado: string
-  fecha_emergencia: string | null
-  direccion_emergencia: string | null
-  bombero_que_realiza_pof: string | null
-  updated_at: string
-}
+type ParteRow = Pick<
+  Parte,
+  | 'id'
+  | 'estado'
+  | 'numero_oficial'
+  | 'fecha_emergencia'
+  | 'direccion_emergencia'
+  | 'bombero_que_realiza_pof'
+  | 'updated_at'
+  | 'created_by'
+>
 
 export function DashboardPage() {
+  const { user, profile } = useAuth()
   const [partes, setPartes] = useState<ParteRow[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -34,27 +42,48 @@ export function DashboardPage() {
           + Nuevo POF
         </Link>
       </div>
+      {profile?.rol === 'admin' || profile?.rol === 'consulta' ? (
+        <p className="hint" style={{ marginTop: '0.75rem', marginBottom: 0 }}>
+          Como {profile.rol === 'admin' ? 'administrador' : 'consulta'} podés descargar el PDF de cualquier parte ya
+          enviado.
+        </p>
+      ) : null}
       {partes.length === 0 ? (
         <p style={{ marginTop: '1rem' }}>No hay partes. Cree un nuevo POF.</p>
       ) : (
-        <div style={{ marginTop: '1rem' }}>
-          {partes.map((p) => (
-            <Link
-              key={p.id}
-              to={p.estado === 'borrador' ? `/parte/${p.id}` : `/ver/${p.id}`}
-              className="list-item"
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem' }}>
-                <strong>
-                  {p.fecha_emergencia ?? 'Sin fecha'} — {p.direccion_emergencia ?? 'POF'}
-                </strong>
-                <span className={`badge badge-${p.estado}`}>{p.estado}</span>
+        <div className="parte-list" style={{ marginTop: '1rem' }}>
+          {partes.map((p) => {
+            const dest = p.estado === 'borrador' ? `/parte/${p.id}` : `/ver/${p.id}`
+            const pdfPermite = canDownloadPofPdf(profile?.rol, user?.id, p)
+            return (
+              <div key={p.id} className="parte-list-row">
+                <Link to={dest} className="list-item parte-list-row-main">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    <strong>
+                      {p.numero_oficial != null ? <>N° {p.numero_oficial} · </> : null}
+                      {p.fecha_emergencia ?? 'Sin fecha'} — {p.direccion_emergencia ?? 'POF'}
+                    </strong>
+                    <span className={`badge badge-${p.estado}`}>{p.estado}</span>
+                  </div>
+                  <div style={{ fontSize: '0.9rem', color: '#555' }}>
+                    {p.direccion_emergencia ?? 'Sin dirección'} · {p.bombero_que_realiza_pof}
+                  </div>
+                </Link>
+                <div className="parte-list-row-pdf">
+                  {p.estado === 'enviado' ? (
+                    <PofPdfButton
+                      parteId={p.id}
+                      canDownload={pdfPermite}
+                      compact
+                      blockedHint={pdfPermite ? null : 'Sin permiso'}
+                    />
+                  ) : (
+                    <span className="hint hint-compact">PDF al enviar</span>
+                  )}
+                </div>
               </div>
-              <div style={{ fontSize: '0.9rem', color: '#555' }}>
-                {p.direccion_emergencia ?? 'Sin dirección'} · {p.bombero_que_realiza_pof}
-              </div>
-            </Link>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>

@@ -13,7 +13,7 @@ Si en **Settings → Pages** tenés **Source: Deploy from a branch**, GitHub pub
 ### Pasos
 
 1. Repo → **Settings** → **Pages** → **Source:** **GitHub Actions** (no una rama).
-2. **Secrets** (`Settings` → `Secrets and variables` → `Actions`): `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`.
+2. **Secrets** (`Settings` → `Secrets and variables` → `Actions`): `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`. Opcional: `VITE_ANDROID_APK_URL` y `VITE_IOS_APP_URL` si querés que el login muestre enlaces de descarga (APK / tienda).
 3. Push a `main` o **Re-run** del workflow **Deploy GitHub Pages**.
 4. Primera vez: puede pedir aprobar el entorno **github-pages**.
 5. Supabase Auth: tabla **[Supabase y URLs de Auth](#supabase-y-urls-de-auth)** más abajo.

@@ -9,6 +9,7 @@ import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 import { fetchProfileByUserId } from '../services/auth-profile'
 import type { Profile } from '../types/database'
+import { mapSupabaseAuthMessage } from '../utils/authErrors'
 
 interface AuthState {
   session: Session | null
@@ -26,6 +27,18 @@ interface AuthState {
 
 const AuthContext = createContext<AuthState | null>(null)
 
+async function loadProfileOrRejectBlocked(userId: string): Promise<Profile | null> {
+  const prof = await fetchProfileByUserId(userId)
+  if (prof && prof.activo === false) {
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('auth_notice', 'blocked')
+    }
+    await supabase.auth.signOut()
+    return null
+  }
+  return prof
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [user, setUser] = useState<User | null>(null)
@@ -33,31 +46,57 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-      setUser(data.session?.user ?? null)
-      if (data.session?.user) {
-        fetchProfileByUserId(data.session.user.id).then(setProfile).finally(() => setLoading(false))
-      } else {
-        setLoading(false)
+    let mounted = true
+
+    async function syncAuth(sess: Session | null) {
+      setSession(sess)
+      setUser(sess?.user ?? null)
+      if (!sess?.user) {
+        setProfile(null)
+        return
       }
-    })
+      const prof = await loadProfileOrRejectBlocked(sess.user.id)
+      if (!mounted) return
+      setProfile(prof)
+    }
+
+    async function init() {
+      const {
+        data: { session: s },
+      } = await supabase.auth.getSession()
+      await syncAuth(s)
+      if (mounted) setLoading(false)
+    }
+
+    void init()
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession)
-      setUser(newSession?.user ?? null)
-      if (newSession?.user) fetchProfileByUserId(newSession.user.id).then(setProfile)
-      else setProfile(null)
+      void (async () => {
+        await syncAuth(newSession)
+        if (mounted) setLoading(false)
+      })()
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
   }, [])
 
   async function signIn(email: string, password: string) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    return { error: error?.message ?? null }
+    const { error, data } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) return { error: error.message ?? null }
+    const u = data.user
+    if (!u) return { error: null }
+    const prof = await fetchProfileByUserId(u.id)
+    if (prof && prof.activo === false) {
+      sessionStorage.setItem('auth_notice', 'blocked')
+      await supabase.auth.signOut()
+      return { error: 'Su cuenta está deshabilitada. Contacte a la comandancia.' }
+    }
+    return { error: null }
   }
 
   async function signUp(email: string, password: string, nombre: string) {
@@ -73,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ...(emailRedirectTo ? { emailRedirectTo } : {}),
       },
     })
-    return { error: error?.message ?? null }
+    return { error: mapSupabaseAuthMessage(error?.message ?? null) }
   }
 
   async function signOut() {

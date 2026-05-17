@@ -3,6 +3,8 @@ import { MisconfiguredEnv } from './components/MisconfiguredEnv'
 import { AuthProvider } from './context/AuthContext'
 import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { AdminRoute } from './components/AdminRoute'
+import { AdminUsersPage } from './pages/AdminUsersPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { LoginPage } from './pages/LoginPage'
 import { ParteDetailPage } from './pages/ParteDetailPage'
@@ -32,6 +34,14 @@ export default function App() {
             <Route path="nuevo" element={<ParteWizardPage />} />
             <Route path="parte/:id" element={<ParteWizardPage />} />
             <Route path="ver/:id" element={<ParteDetailPage />} />
+            <Route
+              path="admin"
+              element={
+                <AdminRoute>
+                  <AdminUsersPage />
+                </AdminRoute>
+              }
+            />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -2,7 +2,7 @@ import { Link, Outlet } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export function Layout() {
-  const { user, signOut } = useAuth()
+  const { user, profile, signOut } = useAuth()
 
   return (
     <>
@@ -11,6 +11,9 @@ export function Layout() {
         <nav>
           <Link to="/">Mis partes</Link>
           <Link to="/nuevo">Nuevo POF</Link>
+          {profile?.rol === 'admin' && profile.activo ? (
+            <Link to="/admin">Administración</Link>
+          ) : null}
           <span style={{ opacity: 0.9, fontSize: '0.85rem' }}>{user?.email}</span>
           <button type="button" className="link" onClick={() => signOut()}>
             Salir

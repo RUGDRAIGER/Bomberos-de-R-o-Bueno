@@ -29,6 +29,8 @@ En el celular, con la página abierta:
 
 Usa **HTTPS** en producción; en desarrollo la PWA puede instalarse según el navegador.
 
+En la **pantalla de login** hay enlaces e instrucciones para instalar como app (PWA) y, si configurás variables de entorno, para APK (Android) y App Store/TestFlight (iOS).
+
 ## 4. Build de prueba
 
 ```bash

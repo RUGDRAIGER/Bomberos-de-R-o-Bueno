@@ -1,5 +1,6 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
+import { MobileInstallHint } from '../components/MobileInstallHint'
 import { useAuth } from '../context/AuthContext'
 
 export function LoginPage() {
@@ -11,6 +12,14 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    const notice = sessionStorage.getItem('auth_notice')
+    if (notice === 'blocked') {
+      setError('Su cuenta fue deshabilitada. Contacte a la comandancia.')
+      sessionStorage.removeItem('auth_notice')
+    }
+  }, [])
 
   if (!loading && session) return <Navigate to="/" replace />
 
@@ -78,6 +87,8 @@ export function LoginPage() {
             {mode === 'login' ? 'Crear cuenta' : 'Ya tengo cuenta'}
           </button>
         </p>
+        <hr className="login-divider" />
+        <MobileInstallHint />
       </div>
     </div>
   )

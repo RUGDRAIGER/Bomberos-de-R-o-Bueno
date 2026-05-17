@@ -13,7 +13,7 @@ import { pdfTxt } from './pdfTxt'
 
 export function PofPdfDocument({ vm }: { vm: ParteInformeVm }) {
   const p = vm.parte
-  const meta = `ID ${p.id} · Estado ${pdfTxt(p.estado)} · Generado ${new Date().toISOString().slice(0, 16)}`
+  const meta = `N° ${p.numero_oficial ?? '—'} · ID ${p.id.slice(0, 8)}… · Estado ${pdfTxt(p.estado)} · Generado ${new Date().toISOString().slice(0, 16)}`
   const topPad = vm.branding.comandanciaLogoUrl ? 52 : 0
 
   return (
@@ -25,6 +25,9 @@ export function PofPdfDocument({ vm }: { vm: ParteInformeVm }) {
           <Text style={pdfStyles.subtitle}>
             Comandancia Cuerpo de Bomberos de Río Bueno — Edición N°02 Enero 2026
           </Text>
+          {p.numero_oficial != null ? (
+            <PdfRow label="N° registro oficial" value={String(p.numero_oficial)} />
+          ) : null}
           <PdfRow label="Bombero que realiza POF" value={p.bombero_que_realiza_pof} />
           <PofPdfEmergencia vm={vm} />
           <PofPdfMando vm={vm} />

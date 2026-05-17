@@ -46,6 +46,7 @@ export async function updateParte(id: string, payload: ParteFormData, userId: st
     .from('partes')
     .update({ ...rest, updated_by: userId })
     .eq('id', id)
+    .eq('estado', 'borrador')
   if (error) throw error
 
   if (material_ids !== undefined) {

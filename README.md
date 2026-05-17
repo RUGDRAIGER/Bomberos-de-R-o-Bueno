@@ -15,6 +15,13 @@ En **SQL Editor**, ejecutar en orden:
 2. `supabase/migrations/002_seed_catalogos.sql`
 3. `supabase/migrations/003_pdf_branding.sql`
 4. `supabase/migrations/004_parte_firma.sql` (firma opcional en Storage)
+5. `supabase/migrations/005_fix_rls_update_policies.sql` (envío borrador→enviado)
+6. `supabase/migrations/006_parte_correlativo_e_inmutable.sql` (N° oficial correlativo; no editar enviados)
+7. `supabase/migrations/007_admin_panel_profiles.sql` (panel admin: listar usuarios, bloqueo en RLS, FK borrar usuario)
+
+**Eliminar usuarios desde la app:** desplegá la Edge Function `admin-delete-user` (ver [docs/ADMIN_PANEL.md](docs/ADMIN_PANEL.md)).
+
+**Admin:** para dar rol `admin` a tu usuario (solo SQL en Dashboard): [docs/PROMOVER_ADMIN.md](docs/PROMOVER_ADMIN.md).
 
 Logos PDF: [docs/LOGOS_PDF.md](docs/LOGOS_PDF.md). Firma: [docs/FIRMA.md](docs/FIRMA.md).
 

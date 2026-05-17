@@ -9,11 +9,15 @@ export interface Profile {
   nombre_completo: string | null
   rol: AppRole
   activo: boolean
+  created_at?: string
+  updated_at?: string
 }
 
 export interface Parte {
   id: string
   estado: ParteEstado
+  /** Correlativo único al enviar (fiscalía / archivo). Null en borrador. */
+  numero_oficial: number | null
   paso_actual: number
   bombero_que_realiza_pof: string | null
   fecha_emergencia: string | null

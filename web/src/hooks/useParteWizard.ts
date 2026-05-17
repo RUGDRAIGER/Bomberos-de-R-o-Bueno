@@ -25,12 +25,16 @@ export function useParteWizard() {
   useEffect(() => {
     if (!id || !user) return
     void getParte(id).then(async (p) => {
+      if (p.estado === 'enviado') {
+        navigate(`/ver/${p.id}`, { replace: true })
+        return
+      }
       const mats = await getParteMaterial(id)
       setParteId(p.id)
       setPaso(p.paso_actual ?? 1)
       setData({ ...p, material_ids: mats })
     })
-  }, [id, user])
+  }, [id, user, navigate])
 
   const patch = (p: Partial<ParteFormData>) => setData((d) => ({ ...d, ...p }))
 
