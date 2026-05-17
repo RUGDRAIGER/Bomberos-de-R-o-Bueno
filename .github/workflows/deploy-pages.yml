@@ -36,6 +36,17 @@ jobs:
             echo "::error::Faltan secrets: VITE_SUPABASE_URL y/o VITE_SUPABASE_ANON_KEY (Settings → Secrets → Actions)."
             exit 1
           fi
+          # Mostrar tipo de valor para diagnosticar (nunca muestra el secreto completo)
+          if [[ "$VITE_SUPABASE_URL" == https://* ]]; then
+            echo "INFO: VITE_SUPABASE_URL comienza con https:// ✓"
+          else
+            echo "::warning::VITE_SUPABASE_URL no comienza con https://. Valor actual empieza con: ${VITE_SUPABASE_URL:0:8}... (se esperaba https://xxxxx.supabase.co)"
+          fi
+          if [ ${#VITE_SUPABASE_ANON_KEY} -gt 20 ]; then
+            echo "INFO: VITE_SUPABASE_ANON_KEY tiene longitud válida ✓"
+          else
+            echo "::warning::VITE_SUPABASE_ANON_KEY parece muy corta (${#VITE_SUPABASE_ANON_KEY} chars). Debe ser la clave anon public larga de Supabase."
+          fi
 
       - uses: actions/setup-node@v4
         with:
