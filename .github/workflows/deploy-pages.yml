@@ -1,4 +1,4 @@
-# Publica la SPA desde web/dist. En GitHub: Settings → Pages → Source → GitHub Actions (no “Deploy from branch”).
+# Publica la SPA desde web/dist. En GitHub: Settings → Pages → Source → GitHub Actions (no "Deploy from branch").
 
 name: Deploy GitHub Pages
 
@@ -23,29 +23,34 @@ jobs:
       VITE_SITE_BASE: /Bomberos-de-R-o-Bueno/
       VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
       VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-    defaults:
-      run:
-        working-directory: web
     steps:
-      - name: Comprobar secrets de Supabase (build)
+      - uses: actions/checkout@v4
+
+      - name: Comprobar secrets de Supabase
         run: |
           if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
-            echo "::error::Faltan secrets del repo: VITE_SUPABASE_URL y/o VITE_SUPABASE_ANON_KEY (Settings → Secrets → Actions)."
+            echo "::error::Faltan secrets: VITE_SUPABASE_URL y/o VITE_SUPABASE_ANON_KEY (Settings → Secrets → Actions)."
             exit 1
           fi
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-      - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: npm
           cache-dependency-path: web/package-lock.json
+
       - run: npm ci
+        working-directory: web
+
       - run: npm run build
+        working-directory: web
+
       - run: cp dist/index.html dist/404.html
+        working-directory: web
+
       - run: touch dist/.nojekyll
+        working-directory: web
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/dist
