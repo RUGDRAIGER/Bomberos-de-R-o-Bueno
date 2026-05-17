@@ -1,15 +1,16 @@
 import { createClient } from '@supabase/supabase-js'
 
-const url = import.meta.env.VITE_SUPABASE_URL
-const key = import.meta.env.VITE_SUPABASE_ANON_KEY
+const url = import.meta.env.VITE_SUPABASE_URL?.trim()
+const key = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
 
 if (!url || !key) {
   console.warn(
-    'Faltan VITE_SUPABASE_URL o VITE_SUPABASE_ANON_KEY. Copia .env.example a .env.local'
+    'Faltan VITE_SUPABASE_URL o VITE_SUPABASE_ANON_KEY. Copiá web/.env.example a web/.env.local y completá los valores.'
   )
 }
 
+/** Sin fallback a proyecto real: en repo público solo lectura desde variables de entorno. */
 export const supabase = createClient(
-  url ?? 'https://hlbwpwojmydpkdjbeluv.supabase.co',
-  key ?? 'placeholder-configura-env'
+  url || 'https://configure-env.invalid',
+  key || 'configure-env-anon-key'
 )

@@ -2,7 +2,7 @@
 
 Sistema web para **Parte de Operaciones Finales 2026** — Cuerpo de Bomberos de Río Bueno.
 
-- **Supabase:** [Dashboard](https://supabase.com/dashboard/project/hlbwpwojmydpkdjbeluv) · API: `https://hlbwpwojmydpkdjbeluv.supabase.co`
+- **Supabase:** creá el proyecto en [supabase.com](https://supabase.com); URL y anon key en **Project Settings → API**.
 - **Formulario original:** [Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSes-dAKxJKzcwLq6Lut4K4tQ7BBUiaD_MCql6m1vF2i5BWUlg/viewform)
 
 ## Inicio rápido
@@ -20,21 +20,20 @@ Logos PDF: [docs/LOGOS_PDF.md](docs/LOGOS_PDF.md). Firma: [docs/FIRMA.md](docs/F
 
 En **Authentication → Providers**, habilitar **Email** (y desactivar confirmación de email en desarrollo si lo desea).
 
-### 2. Claves de la app
+### 2. Variables de entorno (**no** van en git)
 
-En Supabase: **Project Settings → API**
+El repo está pensado para ser **público**: los `.env` con datos reales están **ignorados**.
 
-- `Project URL` → `VITE_SUPABASE_URL`
-- `anon public` → `VITE_SUPABASE_ANON_KEY`
+| Qué necesitás | Acción |
+|---------------|--------|
+| App (`npm run dev` / build local) | Copiá `web/.env.example` → `web/.env.local` y completá URL + anon key (**Settings → API**). |
+| Scripts Postgres locales | Creá `supabase/.env` con `DATABASE_URL` (ver `supabase/config.env.example`). Ese archivo **no se sube**. |
 
-Crear archivo `web/.env.local` (no subir a git):
+Nombres en Dashboard (**API**): `Project URL` → `VITE_SUPABASE_URL`, anon **public** → `VITE_SUPABASE_ANON_KEY`.
 
-```env
-VITE_SUPABASE_URL=https://hlbwpwojmydpkdjbeluv.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJ...tu_clave_anon
-```
+**Si alguna vez subiste una clave real a git:** regenerá la anon key en Supabase y, si hace falta, limpiá historial (`git filter-repo`).
 
-Conexión Postgres (solo scripts locales): ver `supabase/config.env.example` y `supabase/.env`.
+Conexión Postgres: **Settings → Database** (pooler para scripts). Referencia en `supabase/config.env.example`.
 
 ### 3. Frontend
 
@@ -82,6 +81,10 @@ Tras registrarse, en SQL Editor:
 UPDATE profiles SET rol = 'admin' WHERE email = 'tu@correo.com';
 ```
 
+## Producción
+
+Guía de despliegue (Vercel, Cloudflare, Netlify, notas GitHub Pages): [docs/DEPLOY.md](docs/DEPLOY.md).
+
 ## Checklist del plan
 
-Ver conversación / Gantt: Fase 0–3 en progreso; Fase 5–7 pendientes.
+Estado del desarrollo: [PROGRESO.md](PROGRESO.md).

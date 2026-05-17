@@ -2,9 +2,11 @@ node_modules/
 dist/
 web/dev-dist/
 *.tsbuildinfo
+
+# Variables de entorno: no subir (repo público). Solo plantillas con nombre explícito.
 .env
-.env.local
-supabase/.env
-**/supabase/.env
+.env.*
+!web/.env.example
+
 *.log
 .DS_Store
