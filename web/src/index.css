@@ -1,0 +1,297 @@
+:root {
+  --rojo: #cf2a27;
+  --rojo-oscuro: #9e1f1d;
+  --gris-900: #1a1a1a;
+  --gris-700: #444;
+  --gris-200: #e8e8e8;
+  --gris-100: #f5f5f5;
+  --blanco: #fff;
+  --sombra: 0 2px 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.5;
+  color: var(--gris-900);
+  background: var(--gris-100);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--rojo);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.card {
+  background: var(--blanco);
+  border-radius: 12px;
+  box-shadow: var(--sombra);
+  padding: 1.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--rojo);
+  color: var(--blanco);
+}
+
+.btn-primary:hover {
+  background: var(--rojo-oscuro);
+}
+
+.btn-secondary {
+  background: var(--gris-200);
+  color: var(--gris-900);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--gris-700);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--gris-200);
+  border-radius: 8px;
+}
+
+.field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.field .hint {
+  font-size: 0.8rem;
+  color: var(--gris-700);
+  margin-top: 0.25rem;
+}
+
+.field .error {
+  color: var(--rojo);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.header-app {
+  background: var(--rojo);
+  color: var(--blanco);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.header-app h1 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.header-app nav {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.header-app a,
+.header-app button.link {
+  color: var(--blanco);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.wizard-progress {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 1.25rem;
+}
+
+.wizard-progress span {
+  flex: 1;
+  height: 4px;
+  background: var(--gris-200);
+  border-radius: 2px;
+}
+
+.wizard-progress span.active {
+  background: var(--rojo);
+}
+
+.wizard-progress span.done {
+  background: var(--rojo-oscuro);
+}
+
+.wizard-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  gap: 0.75rem;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.checkbox-grid label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-weight: normal;
+  cursor: pointer;
+  padding: 0.5rem;
+  border: 1px solid var(--gris-200);
+  border-radius: 8px;
+}
+
+.checkbox-grid input {
+  width: auto;
+  margin-top: 0.2rem;
+}
+
+.radio-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.radio-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.alert-error {
+  background: #fde8e8;
+  color: var(--rojo-oscuro);
+}
+
+.alert-info {
+  background: #e8f0fd;
+  color: #1a4a8a;
+}
+
+.list-item {
+  display: block;
+  padding: 1rem;
+  border-bottom: 1px solid var(--gris-200);
+  text-decoration: none;
+  color: inherit;
+}
+
+.list-item:hover {
+  background: var(--gris-100);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-borrador {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-enviado {
+  background: #d4edda;
+  color: #155724;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.login-page .card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-page h1 {
+  margin-top: 0;
+  color: var(--rojo);
+}
+
+.section-title {
+  font-size: 1.15rem;
+  color: var(--rojo);
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--gris-200);
+}
