@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">POF Bomberos Rio Bueno</string>
+    <string name="title_activity_main">POF Bomberos Rio Bueno</string>
+    <string name="package_name">com.bomberos.riobueno.pof</string>
+    <string name="custom_url_scheme">com.bomberos.riobueno.pof</string>
+</resources>

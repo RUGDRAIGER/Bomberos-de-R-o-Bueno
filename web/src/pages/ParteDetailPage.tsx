@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { PofPdfButton } from '../components/PofPdfButton'
 import { getParte } from '../services/partes'
 import type { Parte } from '../types/database'
 
@@ -40,11 +41,14 @@ export function ParteDetailPage() {
         <dt>Observaciones</dt>
         <dd>{parte.observaciones}</dd>
       </dl>
-      {parte.estado === 'borrador' && (
-        <Link to={`/parte/${parte.id}`} className="btn btn-primary" style={{ marginRight: '0.5rem' }}>
-          Continuar edición
-        </Link>
-      )}
+      <div style={{ marginTop: '1rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+        <PofPdfButton parteId={parte.id} />
+        {parte.estado === 'borrador' && (
+          <Link to={`/parte/${parte.id}`} className="btn btn-primary">
+            Continuar edición
+          </Link>
+        )}
+      </div>
       <p style={{ marginTop: '1rem' }}>
         <Link to="/">← Volver al listado</Link>
       </p>

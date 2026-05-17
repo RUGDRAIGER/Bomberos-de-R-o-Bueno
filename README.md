@@ -13,6 +13,10 @@ En **SQL Editor**, ejecutar en orden:
 
 1. `supabase/migrations/001_initial_schema.sql`
 2. `supabase/migrations/002_seed_catalogos.sql`
+3. `supabase/migrations/003_pdf_branding.sql`
+4. `supabase/migrations/004_parte_firma.sql` (firma opcional en Storage)
+
+Logos PDF: [docs/LOGOS_PDF.md](docs/LOGOS_PDF.md). Firma: [docs/FIRMA.md](docs/FIRMA.md).
 
 En **Authentication → Providers**, habilitar **Email** (y desactivar confirmación de email en desarrollo si lo desea).
 
@@ -40,6 +44,8 @@ npm install
 npm run dev
 ```
 
+**APK (Android):** con [Capacitor](https://capacitorjs.com/) (`web/android`). Tras cambios en la app: `npm run cap:sync`; abrir en Android Studio: `npm run cap:open:android`. Detalle en [docs/MOVIL.md](docs/MOVIL.md).
+
 Abrir `http://localhost:5173`
 
 **Probar en el celular:** `npm run dev:host` y seguir [docs/MOVIL.md](docs/MOVIL.md).
@@ -49,8 +55,12 @@ Abrir `http://localhost:5173`
 ```
 PROYECTO BOMBERO/
 ├── supabase/migrations/   # Esquema SQL + catálogos
-└── web/                   # React + Vite + TypeScript
+└── web/                   # React + Vite + TypeScript + Capacitor (android/)
 ```
+
+## PDF del POF
+
+En la pantalla **detalle** del parte: botón **Descargar PDF** (informe A4 con datos y catálogos resueltos).
 
 ## Módulos implementados
 
@@ -59,8 +69,10 @@ PROYECTO BOMBERO/
 - [x] Auth email/contraseña
 - [x] Wizard 8 pasos con ramas oficial/bombero
 - [x] Listado y borrador/enviado
-- [ ] PDF informe (próxima fase)
-- [ ] PWA / APK (próxima fase)
+- [x] PDF informe (descarga desde detalle)
+- [x] Firma digital opcional (paso 8, PNG en `pof-assets/firmas/`)
+- [x] PWA (instalable)
+- [x] Capacitor + proyecto Android (generar APK en Android Studio)
 
 ## Primer admin
 

@@ -1,6 +1,7 @@
+import { FirmaUploader } from '../signature/FirmaUploader'
 import type { WizardStepProps } from './stepTypes'
 
-export function Paso8({ data, onChange, materiales = [] }: WizardStepProps) {
+export function Paso8({ data, onChange, materiales = [], parteId }: WizardStepProps) {
   const ids = data.material_ids ?? []
 
   function toggle(id: number) {
@@ -35,6 +36,11 @@ export function Paso8({ data, onChange, materiales = [] }: WizardStepProps) {
           onChange={(e) => onChange({ moviles_otros_cb: e.target.value })}
         />
       </div>
+      <FirmaUploader
+        parteId={parteId ?? null}
+        tieneFirma={Boolean(data.firma_path)}
+        onSaved={({ path, firmado_at }) => onChange({ firma_path: path, firmado_at })}
+      />
     </>
   )
 }

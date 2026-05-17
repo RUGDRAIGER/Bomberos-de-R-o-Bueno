@@ -34,13 +34,16 @@ Marque `[x]` al completar cada módulo.
 - [ ] Mejorar vista detalle con catálogos resueltos
 
 ## Fase 5 — Informes
-- [ ] Plantilla PDF
-- [ ] Descarga desde detalle
+- [x] Plantilla PDF (A4, @react-pdf/renderer)
+- [x] Descarga desde detalle (`Descargar PDF`)
+- [x] Logos PDF (bucket `pof-assets`, tablas `pdf_branding` / `compania_pdf_logo`)
+- [x] Firma opcional (migración `004_parte_firma.sql`, paso 8, firma en PDF)
 
 ## Fase 6 — Móvil
 - [x] PWA (vite-plugin-pwa + iconos + registro SW)
 - [x] Scripts `dev:host` / `preview:host`
-- [ ] APK Capacitor
+- [x] Capacitor 8 + carpeta `web/android` (`cap:sync`, `cap:open:android`)
+- [ ] APK firmado / distribución (Play Store o instalación lateral)
 
 ## Fase 7 — Cierre
 - [ ] Piloto usuarios

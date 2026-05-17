@@ -66,6 +66,7 @@ export function useParteWizard() {
     companias: cats.companias,
     materiales: cats.materiales,
     userEmail: user?.email,
+    parteId,
   }
 
   return {

@@ -47,6 +47,8 @@ export interface Parte {
   bomberos_6ta: number | null
   material_otro: string | null
   moviles_otros_cb: string | null
+  firma_path: string | null
+  firmado_at: string | null
   created_by: string | null
   created_at: string
   updated_at: string

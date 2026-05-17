@@ -8,4 +8,5 @@ export interface WizardStepProps {
   companias?: { id: number; nombre: string }[]
   materiales?: { id: number; codigo: string; descripcion: string }[]
   userEmail?: string
+  parteId?: string | null
 }
