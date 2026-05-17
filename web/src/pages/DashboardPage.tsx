@@ -31,54 +31,63 @@ export function DashboardPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p>Cargando partes...</p>
+  if (loading) return (
+    <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--gris-500)' }}>
+      Cargando partes…
+    </div>
+  )
   if (error) return <div className="alert alert-error">{error}</div>
 
   return (
     <div className="card">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2 style={{ margin: 0 }}>Mis partes</h2>
-        <Link to="/nuevo" className="btn btn-primary">
-          + Nuevo POF
-        </Link>
+      <div className="dashboard-header">
+        <h2>Mis partes</h2>
+        <Link to="/nuevo" className="btn btn-primary">+ Nuevo POF</Link>
       </div>
-      {profile?.rol === 'admin' || profile?.rol === 'consulta' ? (
-        <p className="hint" style={{ marginTop: '0.75rem', marginBottom: 0 }}>
-          Como {profile.rol === 'admin' ? 'administrador' : 'consulta'} podés descargar el PDF de cualquier parte ya
-          enviado.
-        </p>
+
+      {profile?.rol === 'admin' ? (
+        <div className="alert alert-info" style={{ marginBottom: '0.75rem' }}>
+          Modo administrador: podés descargar el PDF de cualquier parte, incluidos borradores.
+        </div>
       ) : null}
+
       {partes.length === 0 ? (
-        <p style={{ marginTop: '1rem' }}>No hay partes. Cree un nuevo POF.</p>
+        <div className="parte-list-empty">
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📋</div>
+          <p style={{ margin: 0 }}>No hay partes aún. Creá tu primer POF.</p>
+        </div>
       ) : (
-        <div className="parte-list" style={{ marginTop: '1rem' }}>
+        <div className="parte-list">
           {partes.map((p) => {
             const dest = p.estado === 'borrador' ? `/parte/${p.id}` : `/ver/${p.id}`
             const pdfPermite = canDownloadPofPdf(profile?.rol, user?.id, p)
             return (
               <div key={p.id} className="parte-list-row">
-                <Link to={dest} className="list-item parte-list-row-main">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <Link to={dest} className="parte-list-row-main">
+                  <div className="parte-list-title">
                     <strong>
-                      {p.numero_oficial != null ? <>N° {p.numero_oficial} · </> : null}
-                      {p.fecha_emergencia ?? 'Sin fecha'} — {p.direccion_emergencia ?? 'POF'}
+                      {p.numero_oficial != null
+                        ? `N°\u00a0${p.numero_oficial} · `
+                        : null}
+                      {p.fecha_emergencia ?? 'Sin fecha'}
                     </strong>
                     <span className={`badge badge-${p.estado}`}>{p.estado}</span>
                   </div>
-                  <div style={{ fontSize: '0.9rem', color: '#555' }}>
+                  <div className="parte-list-sub">
                     {p.direccion_emergencia ?? 'Sin dirección'} · {p.bombero_que_realiza_pof}
                   </div>
                 </Link>
                 <div className="parte-list-row-pdf">
-                  {p.estado === 'enviado' ? (
+                  {pdfPermite ? (
                     <PofPdfButton
                       parteId={p.id}
-                      canDownload={pdfPermite}
+                      canDownload
                       compact
-                      blockedHint={pdfPermite ? null : 'Sin permiso'}
                     />
                   ) : (
-                    <span className="hint hint-compact">PDF al enviar</span>
+                    <span className="hint hint-compact">
+                      {p.estado === 'borrador' ? 'PDF al enviar' : 'Sin permiso'}
+                    </span>
                   )}
                 </div>
               </div>

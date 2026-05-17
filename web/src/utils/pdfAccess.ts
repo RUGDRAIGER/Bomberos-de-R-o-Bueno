@@ -5,14 +5,19 @@ type PdfPermisoParte = {
   created_by: string | null
 }
 
-/** Solo partes enviados; admin/consulta cualquier enviado; bombero solo el propio. */
+/**
+ * Admin puede descargar cualquier parte (incluido borrador, para revisar formato).
+ * Consulta puede descargar cualquier enviado.
+ * Bombero solo el suyo enviado.
+ */
 export function canDownloadPofPdf(
   rol: AppRole | undefined,
   userId: string | undefined,
   parte: PdfPermisoParte
 ): boolean {
-  if (parte.estado !== 'enviado') return false
   if (!userId) return false
-  if (rol === 'admin' || rol === 'consulta') return true
+  if (rol === 'admin') return true
+  if (parte.estado !== 'enviado') return false
+  if (rol === 'consulta') return true
   return parte.created_by === userId
 }

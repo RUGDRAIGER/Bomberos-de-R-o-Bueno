@@ -22,41 +22,56 @@ export function WizardShell({
   onSubmit: () => void
 }) {
   const child: ReactNode = <WizardStepRouter paso={paso} props={stepProps} />
+  const isLast = paso >= totalPasos
 
   return (
     <div className="card">
-      <p style={{ margin: '0 0 0.5rem', fontSize: '0.85rem', color: '#666' }}>
-        Comandancia Cuerpo de Bomberos de Río Bueno — Edición N°02 Enero 2026
-      </p>
-      <div className="wizard-progress">
-        {Array.from({ length: totalPasos }, (_, i) => (
-          <span
-            key={i}
-            className={i + 1 < paso ? 'done' : i + 1 === paso ? 'active' : ''}
-          />
-        ))}
+      <div className="wizard-header">
+        <p className="wizard-meta">
+          Comandancia Cuerpo de Bomberos de Río Bueno — Edición N°02 Enero 2026
+        </p>
+        <div className="wizard-progress" role="progressbar" aria-valuenow={paso} aria-valuemax={totalPasos}>
+          {Array.from({ length: totalPasos }, (_, i) => (
+            <span
+              key={i}
+              className={i + 1 < paso ? 'done' : i + 1 === paso ? 'active' : ''}
+            />
+          ))}
+        </div>
+        <p className="wizard-step-label">Paso {paso} de {totalPasos}</p>
       </div>
-      <p style={{ margin: '0 0 1rem' }}>
-        Paso {paso} de {totalPasos}
-      </p>
-      {error && <div className="alert alert-error">{error}</div>}
+
+      {error ? <div className="alert alert-error">{error}</div> : null}
+
       {child}
+
       <div className="wizard-actions">
         <button
           type="button"
-          className="btn btn-secondary"
+          className="btn btn-ghost"
           onClick={onPrev}
           disabled={paso === 1 || saving}
         >
-          Anterior
+          ← Anterior
         </button>
-        {paso < totalPasos ? (
-          <button type="button" className="btn btn-primary" onClick={onNext} disabled={saving}>
-            {saving ? 'Guardando...' : 'Siguiente'}
+
+        {isLast ? (
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={onSubmit}
+            disabled={saving}
+          >
+            {saving ? 'Enviando…' : '✓ Enviar POF'}
           </button>
         ) : (
-          <button type="button" className="btn btn-primary" onClick={onSubmit} disabled={saving}>
-            {saving ? 'Enviando...' : 'Enviar POF'}
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={onNext}
+            disabled={saving}
+          >
+            {saving ? 'Guardando…' : 'Siguiente →'}
           </button>
         )}
       </div>

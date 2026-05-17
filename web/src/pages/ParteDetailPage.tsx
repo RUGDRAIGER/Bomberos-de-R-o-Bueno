@@ -6,6 +6,15 @@ import { getParte } from '../services/partes'
 import type { Parte } from '../types/database'
 import { canDownloadPofPdf } from '../utils/pdfAccess'
 
+function DatoFila({ label, value }: { label: string; value: string | null | undefined }) {
+  return (
+    <div>
+      <dt>{label}</dt>
+      <dd>{value ?? '—'}</dd>
+    </div>
+  )
+}
+
 export function ParteDetailPage() {
   const { id } = useParams()
   const { user, profile } = useAuth()
@@ -20,66 +29,80 @@ export function ParteDetailPage() {
   }, [id])
 
   if (error) return <div className="alert alert-error">{error}</div>
-  if (!parte) return <p>Cargando...</p>
+  if (!parte) return (
+    <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--gris-500)' }}>Cargando…</div>
+  )
 
   const pdfOk = canDownloadPofPdf(profile?.rol, user?.id, parte)
 
+  const horario = [parte.hora_inicio, parte.hora_llegada_primera_unidad, parte.hora_termino]
+    .filter(Boolean).join(' → ')
+
   return (
     <div className="card parte-detail-card">
-      <div className="parte-detail-header">
+      {/* Cabecera */}
+      <div className="parte-detail-hero">
         <div>
-          <h2 style={{ margin: 0 }}>Detalle POF</h2>
+          <h2>Detalle POF</h2>
           {parte.numero_oficial != null ? (
-            <p className="parte-numero-oficial">Registro oficial N° {parte.numero_oficial}</p>
+            <p className="parte-numero-oficial">Registro oficial N°&nbsp;{parte.numero_oficial}</p>
           ) : null}
         </div>
         <span className={`badge badge-${parte.estado}`}>{parte.estado}</span>
       </div>
 
-      <section className="parte-pdf-panel" aria-labelledby="pdf-heading">
-        <h3 id="pdf-heading" className="section-title" style={{ marginTop: '1.25rem' }}>
-          Documento PDF
-        </h3>
-        <p className="hint" style={{ marginTop: 0 }}>
-          El PDF se genera en tu dispositivo al pulsar el botón (no se guarda automáticamente en el servidor).
-        </p>
+      {/* Panel PDF */}
+      <div className="parte-pdf-panel">
+        <div className="parte-pdf-panel-text">
+          <strong style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
+            Documento PDF
+          </strong>
+          <p>
+            {pdfOk
+              ? 'Generado en tu dispositivo al pulsar el botón.'
+              : parte.estado === 'borrador'
+              ? 'Disponible al enviar el parte.'
+              : 'Sin permiso para descargar.'}
+          </p>
+        </div>
         <PofPdfButton
           parteId={parte.id}
           canDownload={pdfOk}
-          blockedHint={
-            parte.estado === 'borrador'
-              ? 'El PDF estará disponible cuando envíes el parte (no se puede descargar en borrador).'
-              : 'No tenés permiso para descargar este parte.'
-          }
+          blockedHint={null}
         />
-      </section>
+      </div>
 
-      <dl style={{ marginTop: '1rem' }}>
-        <dt>Bombero POF</dt>
-        <dd>{parte.bombero_que_realiza_pof}</dd>
-        <dt>Fecha</dt>
-        <dd>{parte.fecha_emergencia}</dd>
-        <dt>Dirección</dt>
-        <dd>{parte.direccion_emergencia}</dd>
-        <dt>Horas</dt>
-        <dd>
-          {parte.hora_inicio} → {parte.hora_llegada_primera_unidad} → {parte.hora_termino}
-        </dd>
-        <dt>Mando</dt>
-        <dd>{parte.tipo_mando}</dd>
-        <dt>Observaciones</dt>
-        <dd>{parte.observaciones}</dd>
-      </dl>
+      {/* Datos */}
+      <div className="parte-detail-body">
+        <p className="section-title">Datos del parte</p>
+        <dl className="parte-detail-dl">
+          <DatoFila label="Bombero POF" value={parte.bombero_que_realiza_pof} />
+          <DatoFila label="Fecha emergencia" value={parte.fecha_emergencia} />
+          <DatoFila label="Dirección" value={parte.direccion_emergencia} />
+          <DatoFila label="Horario" value={horario || null} />
+          <DatoFila label="Área" value={parte.area_intervencion} />
+          <DatoFila label="Tipo mando" value={parte.tipo_mando} />
+          <DatoFila label="Bombero a cargo" value={parte.bombero_nombre_a_cargo} />
+          <DatoFila label="Empresas externas" value={parte.empresas_externas} />
+        </dl>
+        {parte.observaciones ? (
+          <div style={{ marginTop: '1rem' }}>
+            <p className="section-title">Observaciones</p>
+            <p style={{ margin: 0, fontSize: '0.92rem', lineHeight: 1.55 }}>
+              {parte.observaciones}
+            </p>
+          </div>
+        ) : null}
+      </div>
 
+      {/* Acciones */}
       <div className="parte-detail-actions">
         {parte.estado === 'borrador' ? (
-          <Link to={`/parte/${parte.id}`} className="btn btn-primary btn-pdf-full">
+          <Link to={`/parte/${parte.id}`} className="btn btn-primary">
             Continuar edición
           </Link>
         ) : null}
-        <Link to="/" className="btn btn-ghost btn-pdf-full">
-          ← Volver al listado
-        </Link>
+        <Link to="/" className="btn btn-ghost">← Volver</Link>
       </div>
     </div>
   )
