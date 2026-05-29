@@ -41,9 +41,15 @@ export function LoginPage() {
 
   return (
     <div className="login-page">
-      <div className="card">
-        <h1>POF 2026</h1>
-        <p>Comandancia — Cuerpo de Bomberos de Río Bueno</p>
+      <div className="card login-card">
+        <div className="login-brand">
+          <span className="login-brand-icon" aria-hidden>🚒</span>
+          <div>
+            <h1>POF 2026</h1>
+            <p className="login-subtitle">Cuerpo de Bomberos de Río Bueno</p>
+          </div>
+        </div>
+        <p className="login-tagline">Parte de Operaciones Finales — registro digital y PDF oficial</p>
         {error && <div className="alert alert-error">{error}</div>}
         {info && <div className="alert alert-info">{info}</div>}
         <form onSubmit={handleSubmit}>

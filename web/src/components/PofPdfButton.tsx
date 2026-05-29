@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { fetchParteInformeVm } from '../services/parteInforme'
+import { PdfPrepararModal } from './pdf/PdfPrepararModal'
+import { useAuth } from '../context/AuthContext'
+import { getParte } from '../services/partes'
 
 type Props = {
   parteId: string
@@ -14,21 +16,18 @@ export function PofPdfButton({
   compact,
   blockedHint,
 }: Props) {
-  const [busy, setBusy] = useState(false)
-  const [err, setErr] = useState<string | null>(null)
+  const { profile, user } = useAuth()
+  const [modalOpen, setModalOpen] = useState(false)
+  const [puedeGuardarFirma, setPuedeGuardarFirma] = useState(false)
 
-  async function handleClick() {
-    setErr(null)
-    setBusy(true)
+  async function abrirModal() {
     try {
-      const vm = await fetchParteInformeVm(parteId)
-      const { downloadPofPdf } = await import('../pdf/downloadPofPdf')
-      await downloadPofPdf(vm)
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : 'No se pudo generar el PDF')
-    } finally {
-      setBusy(false)
+      const p = await getParte(parteId)
+      setPuedeGuardarFirma(p.estado === 'borrador' && p.created_by === user?.id)
+    } catch {
+      setPuedeGuardarFirma(false)
     }
+    setModalOpen(true)
   }
 
   if (!canDownload) {
@@ -41,16 +40,30 @@ export function PofPdfButton({
   }
 
   return (
-    <div className={compact ? 'pof-pdf-stack pof-pdf-stack--compact' : 'pof-pdf-stack'}>
-      <button
-        type="button"
-        className={`btn btn-secondary ${compact ? 'btn-pdf-compact' : 'btn-pdf-full'}`}
-        onClick={() => void handleClick()}
-        disabled={busy}
-      >
-        {busy ? 'Generando PDF…' : 'Descargar PDF'}
-      </button>
-      {err ? <div className="alert alert-error">{err}</div> : null}
-    </div>
+    <>
+      <div className={compact ? 'pof-pdf-stack pof-pdf-stack--compact' : 'pof-pdf-stack'}>
+        <button
+          type="button"
+          className={`btn ${compact ? 'btn-pdf-compact btn-primary' : 'btn-primary btn-pdf-full'}`}
+          onClick={() => void abrirModal()}
+        >
+          {compact ? '📄 PDF' : '📄 Preparar y descargar PDF'}
+        </button>
+        {!compact ? (
+          <p className="hint" style={{ margin: 0 }}>
+            Logos, firma y documento final en un solo paso.
+          </p>
+        ) : null}
+      </div>
+
+      {modalOpen ? (
+        <PdfPrepararModal
+          parteId={parteId}
+          isAdmin={profile?.rol === 'admin'}
+          puedeGuardarFirma={puedeGuardarFirma}
+          onClose={() => setModalOpen(false)}
+        />
+      ) : null}
+    </>
   )
 }

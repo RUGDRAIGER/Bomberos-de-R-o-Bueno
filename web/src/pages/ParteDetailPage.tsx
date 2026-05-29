@@ -29,18 +29,22 @@ export function ParteDetailPage() {
   }, [id])
 
   if (error) return <div className="alert alert-error">{error}</div>
-  if (!parte) return (
-    <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--gris-500)' }}>Cargando…</div>
-  )
+  if (!parte) {
+    return (
+      <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--gris-500)' }}>
+        Cargando…
+      </div>
+    )
+  }
 
   const pdfOk = canDownloadPofPdf(profile?.rol, user?.id, parte)
 
   const horario = [parte.hora_inicio, parte.hora_llegada_primera_unidad, parte.hora_termino]
-    .filter(Boolean).join(' → ')
+    .filter(Boolean)
+    .join(' → ')
 
   return (
     <div className="card parte-detail-card">
-      {/* Cabecera */}
       <div className="parte-detail-hero">
         <div>
           <h2>Detalle POF</h2>
@@ -51,28 +55,25 @@ export function ParteDetailPage() {
         <span className={`badge badge-${parte.estado}`}>{parte.estado}</span>
       </div>
 
-      {/* Panel PDF */}
-      <div className="parte-pdf-panel">
-        <div className="parte-pdf-panel-text">
-          <strong style={{ display: 'block', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
-            Documento PDF
-          </strong>
+      <div className="parte-pdf-panel pdf-panel-promo">
+        <span className="pdf-panel-promo-icon" aria-hidden>
+          📄
+        </span>
+        <div className="pdf-panel-promo-text">
+          <strong>Documento PDF final</strong>
           <p>
             {pdfOk
-              ? 'Generado en tu dispositivo al pulsar el botón.'
+              ? 'Subí logos del cuerpo y compañía, configurá la firma y generá el PDF en tu dispositivo.'
               : parte.estado === 'borrador'
-              ? 'Disponible al enviar el parte.'
-              : 'Sin permiso para descargar.'}
+                ? 'Disponible al enviar el parte.'
+                : 'Sin permiso para descargar.'}
           </p>
         </div>
-        <PofPdfButton
-          parteId={parte.id}
-          canDownload={pdfOk}
-          blockedHint={null}
-        />
+        {pdfOk ? (
+          <PofPdfButton parteId={parte.id} canDownload blockedHint={null} />
+        ) : null}
       </div>
 
-      {/* Datos */}
       <div className="parte-detail-body">
         <p className="section-title">Datos del parte</p>
         <dl className="parte-detail-dl">
@@ -88,21 +89,28 @@ export function ParteDetailPage() {
         {parte.observaciones ? (
           <div style={{ marginTop: '1rem' }}>
             <p className="section-title">Observaciones</p>
-            <p style={{ margin: 0, fontSize: '0.92rem', lineHeight: 1.55 }}>
-              {parte.observaciones}
+            <p style={{ margin: 0, fontSize: '0.92rem', lineHeight: 1.55 }}>{parte.observaciones}</p>
+          </div>
+        ) : null}
+        {parte.firma_path ? (
+          <div style={{ marginTop: '1rem' }}>
+            <p className="section-title">Firma registrada</p>
+            <p className="hint" style={{ margin: 0 }}>
+              Guardada en el sistema. Podés cambiarla al generar un nuevo PDF (borrador).
             </p>
           </div>
         ) : null}
       </div>
 
-      {/* Acciones */}
       <div className="parte-detail-actions">
         {parte.estado === 'borrador' ? (
           <Link to={`/parte/${parte.id}`} className="btn btn-primary">
             Continuar edición
           </Link>
         ) : null}
-        <Link to="/" className="btn btn-ghost">← Volver</Link>
+        <Link to="/" className="btn btn-ghost">
+          ← Volver
+        </Link>
       </div>
     </div>
   )
