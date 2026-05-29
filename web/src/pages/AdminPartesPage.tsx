@@ -26,7 +26,11 @@ export function AdminPartesPage() {
     setError(null)
     listAllPartesForAdmin(filtro)
       .then(setPartes)
-      .catch((e) => setError(e instanceof Error ? e.message : 'Error al cargar partes'))
+      .catch((e) => {
+        const msg = e instanceof Error ? e.message : 'Error al cargar partes'
+        setError(msg)
+        console.error('listAllPartesForAdmin:', e)
+      })
       .finally(() => setLoading(false))
   }, [filtro])
 
