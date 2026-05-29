@@ -24,6 +24,7 @@ export function AdminUsersTable({
             <th>Correo</th>
             <th>Nombre</th>
             <th>Rol</th>
+            <th>Registro</th>
             <th>Cuenta</th>
             <th>Acciones</th>
           </tr>

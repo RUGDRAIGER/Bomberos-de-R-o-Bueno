@@ -4,6 +4,8 @@ import { AuthProvider } from './context/AuthContext'
 import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { AdminRoute } from './components/AdminRoute'
+import { AdminLayout } from './components/admin/AdminLayout'
+import { AdminPartesPage } from './pages/AdminPartesPage'
 import { AdminUsersPage } from './pages/AdminUsersPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { LoginPage } from './pages/LoginPage'
@@ -38,10 +40,13 @@ export default function App() {
               path="admin"
               element={
                 <AdminRoute>
-                  <AdminUsersPage />
+                  <AdminLayout />
                 </AdminRoute>
               }
-            />
+            >
+              <Route index element={<AdminUsersPage />} />
+              <Route path="partes" element={<AdminPartesPage />} />
+            </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

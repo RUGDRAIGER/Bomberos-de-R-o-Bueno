@@ -30,15 +30,41 @@ export const SignaturePadField = forwardRef<SigPadHandle>(function SignaturePadF
   }))
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const pad = new SignaturePad(canvas, {
+    const el = canvasRef.current
+    if (!el) return
+
+    const pad = new SignaturePad(el, {
       penColor: '#111111',
       minWidth: 0.5,
       maxWidth: 2.2,
     })
     padRef.current = pad
+
+    function resize() {
+      const canvas = canvasRef.current
+      if (!canvas) return
+      const parent = canvas.parentElement
+      if (!parent || parent.clientWidth < 1) return
+      const w = parent.clientWidth
+      const h = 160
+      const ratio = Math.max(window.devicePixelRatio || 1, 1)
+      canvas.width = w * ratio
+      canvas.height = h * ratio
+      canvas.style.width = `${w}px`
+      canvas.style.height = `${h}px`
+      const ctx = canvas.getContext('2d')
+      if (ctx) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0)
+        ctx.scale(ratio, ratio)
+      }
+      pad.clear()
+    }
+
+    const ro = new ResizeObserver(() => resize())
+    if (el.parentElement) ro.observe(el.parentElement)
+    requestAnimationFrame(resize)
     return () => {
+      ro.disconnect()
       pad.off()
       pad.clear()
       padRef.current = null
@@ -48,17 +74,7 @@ export const SignaturePadField = forwardRef<SigPadHandle>(function SignaturePadF
   return (
     <canvas
       ref={canvasRef}
-      width={640}
-      height={200}
-      style={{
-        width: '100%',
-        maxWidth: '100%',
-        height: 160,
-        border: '1px solid var(--gris-200)',
-        borderRadius: 8,
-        touchAction: 'none',
-        background: '#fff',
-      }}
+      className="signature-canvas"
     />
   )
 })

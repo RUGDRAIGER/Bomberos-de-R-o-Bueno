@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { PofBrandBanner } from './PofBrandBanner'
 import { useAuth } from '../context/AuthContext'
 
 export function Layout() {
@@ -7,7 +8,9 @@ export function Layout() {
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
 
-  function close() { setMenuOpen(false) }
+  function close() {
+    setMenuOpen(false)
+  }
 
   async function handleSignOut() {
     close()
@@ -17,41 +20,44 @@ export function Layout() {
 
   return (
     <>
+      <div className="app-sticky-top">
+      <div className="pof-brand-bar">
+        <PofBrandBanner />
+      </div>
       <header className="header-app">
-        <div className="header-logo">
-          <span className="header-logo-icon">🚒</span>
-          <span>POF 2026 — Río Bueno</span>
-        </div>
-
+        <p className="header-app-label">Navegación</p>
         <button
           type="button"
           className="btn-nav-hamburger"
-          aria-label="Abrir menú"
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={menuOpen}
+          aria-controls="app-nav"
           onClick={() => setMenuOpen((v) => !v)}
         >
           {menuOpen ? '✕' : '☰'}
         </button>
-
-        <nav className={`header-nav${menuOpen ? ' open' : ''}`}>
-          <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-active' : ''} onClick={close}>
+        <nav className={`header-nav${menuOpen ? ' open' : ''}`} id="app-nav">
+          <NavLink to="/" end className={({ isActive }) => (isActive ? 'nav-active' : '')} onClick={close}>
             Mis partes
           </NavLink>
-          <NavLink to="/nuevo" className={({ isActive }) => isActive ? 'nav-active' : ''} onClick={close}>
+          <NavLink to="/nuevo" className={({ isActive }) => (isActive ? 'nav-active' : '')} onClick={close}>
             + Nuevo POF
           </NavLink>
           {profile?.rol === 'admin' && profile.activo ? (
-            <NavLink to="/admin" className={({ isActive }) => isActive ? 'nav-active' : ''} onClick={close}>
+            <NavLink to="/admin" className={({ isActive }) => (isActive ? 'nav-active' : '')} onClick={close}>
               Administración
             </NavLink>
           ) : null}
-          <span className="nav-email" title={user?.email ?? undefined}>{user?.email}</span>
-          <button type="button" className="btn-header-link" onClick={handleSignOut}>
+          <span className="nav-email" title={user?.email ?? undefined}>
+            {user?.email}
+          </span>
+          <button type="button" className="btn-header-link" onClick={() => void handleSignOut()}>
             Salir
           </button>
         </nav>
       </header>
-      <main className="container">
+      </div>
+      <main className="container app-main">
         <Outlet />
       </main>
     </>

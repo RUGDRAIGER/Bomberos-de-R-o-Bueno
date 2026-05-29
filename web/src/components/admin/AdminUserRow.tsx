@@ -23,6 +23,15 @@ export function AdminUserRow({
       <td data-label="Correo">{row.email ?? '—'}</td>
       <td data-label="Nombre">{row.nombre_completo ?? '—'}</td>
       <td data-label="Rol">{row.rol}</td>
+      <td data-label="Registro">
+        {row.created_at
+          ? new Date(row.created_at).toLocaleDateString('es-CL', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+            })
+          : '—'}
+      </td>
       <td data-label="Estado">{row.activo ? 'Activo' : 'Bloqueado'}</td>
       <td data-label="Acciones" className="admin-actions-cell">
         <button
